@@ -71,17 +71,10 @@ export default function Spotter() {
     <>
       <Header
         title="Insights AI"
-        subtitle="Natural language analytics for workforce data"
+        subtitle="Ask questions in plain English about scheduling, capacity, providers, and staffing performance"
       />
       <main className="main-content">
         <div className="page-container">
-          <div className="page-header">
-            <h2 className="page-title">Ask Insights AI</h2>
-            <p className="page-subtitle">
-              Ask questions in natural language about scheduling, capacity, providers, and staffing performance
-            </p>
-          </div>
-
           <div className="spotter-layout">
             <div className="spotter-embed-wrap" key={mountKey}>
               <div className="embed-container" ref={embedRef}>

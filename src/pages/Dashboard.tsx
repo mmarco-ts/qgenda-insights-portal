@@ -92,16 +92,10 @@ export default function Dashboard() {
     <>
       <Header
         title="Workforce Dashboard"
-        subtitle="Scheduling, staffing, and capacity analytics"
+        subtitle="Scheduling coverage, provider utilization, and staffing trends across units and locations"
       />
       <main className="main-content">
         <div className="page-container">
-          <div className="page-header">
-            <h2 className="page-title">Workforce Operations Overview</h2>
-            <p className="page-subtitle">
-              Monitor scheduling coverage, provider utilization, and staffing trends across units and locations
-            </p>
-          </div>
           <div className="embed-container" key={mountKey} ref={embedRef} />
         </div>
       </main>

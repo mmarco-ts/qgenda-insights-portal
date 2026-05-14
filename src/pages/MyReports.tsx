@@ -62,17 +62,10 @@ export default function MyReports() {
     <>
       <Header
         title="My Reports"
-        subtitle="Live, API-driven library of Insights Boards available to you"
+        subtitle="Every Insights Board you can access — pulled live from QGenda Insights"
       />
       <main className="main-content">
         <div className="page-container">
-          <div className="page-header">
-            <h2 className="page-title">My Reports</h2>
-            <p className="page-subtitle">
-              Every Insights Board you can access — pulled live from QGenda Insights. Click any card to open it in the workforce dashboard.
-            </p>
-          </div>
-
           <div className="reports-toolbar">
             <div className="reports-search">
               <Search size={16} />
