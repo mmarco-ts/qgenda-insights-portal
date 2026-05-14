@@ -11,6 +11,11 @@ export const QGENDA_MODEL_ID = '7d0a8b72-2620-4040-9b86-644a8cccba9e';
  * Hide-Powered-by + footer rules reused across embeds.
  * Targets the various TS footer/logo modules.
  */
+// Hosted on GitHub + served via jsDelivr CDN once the repo is pushed.
+// Make sure cdn.jsdelivr.net is on the TS CSP img-src allowlist.
+export const QG_SPOTTER_ICON_URL =
+  "https://cdn.jsdelivr.net/gh/mmarco-ts/qgenda-insights-portal@main/public/qg-spotter-icon.svg";
+
 export const HIDE_TS_BRANDING_RULES: Record<string, Record<string, string>> = {
   ".footer-module__footerLogo": { display: "none !important" },
   ".footer-module__footer": { display: "none !important" },
@@ -19,8 +24,19 @@ export const HIDE_TS_BRANDING_RULES: Record<string, Record<string, string>> = {
   "img[alt*='ThoughtSpot']": { display: "none !important" },
   ".bk-logo, .thoughtspot-logo, [class*='thoughtspotLogo']": { display: "none !important" },
   ".collapsible-item-response-module__customIconWrapper": { display: "none !important" },
-  "svg.chat-module__spotterIcon": { display: "none !important" },
   ".button-module__buttonWrapper.chat-connector-resources-module__addConnectorResourceButton": { display: "none !important" },
+
+  // Replace the default Spotter icon with the QGenda Insights AI mark.
+  // We hide the inner SVG and paint our icon as a background on its parent.
+  "svg.chat-module__spotterIcon": {
+    visibility: "hidden",
+  },
+  ".chat-module__spotterIcon, [class*='chat-module__spotterIcon']": {
+    backgroundImage: `url("${QG_SPOTTER_ICON_URL}") !important`,
+    backgroundRepeat: "no-repeat !important",
+    backgroundPosition: "center !important",
+    backgroundSize: "contain !important",
+  },
 };
 
 export const QG_CSS_VARIABLES = {
