@@ -13,8 +13,10 @@ export const QGENDA_MODEL_ID = '7d0a8b72-2620-4040-9b86-644a8cccba9e';
  */
 // Spotter icon hosted on GitHub + served via jsDelivr.
 // Make sure cdn.jsdelivr.net is on the TS CSP img-src allowlist.
+// Pinned to a commit SHA so jsDelivr never serves a stale cached copy.
+// Bump this whenever public/qg-spotter-icon.svg changes.
 export const QG_SPOTTER_ICON_URL =
-  "https://cdn.jsdelivr.net/gh/mmarco-ts/qgenda-insights-portal/public/qg-spotter-icon.svg";
+  "https://cdn.jsdelivr.net/gh/mmarco-ts/qgenda-insights-portal@330e00935152bc68cecdf8a962be7db455d1898e/public/qg-spotter-icon.svg";
 
 export const HIDE_TS_BRANDING_RULES: Record<string, Record<string, string>> = {
   ".footer-module__footerLogo": { display: "none !important" },
