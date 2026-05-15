@@ -11,17 +11,17 @@ import { useTenant, buildRuntimeFilters } from '../lib/tenantContext';
 import '../lib/thoughtspot';
 
 const STARTER_PROMPTS = [
-  'Units with the most open shifts this week',
-  'Overtime hours by department, last 90 days',
-  'Top 10 providers by hours scheduled',
-  'Staffing levels: nights vs days',
-  'Credentials expiring in the next 60 days',
+  'Total shifts by organization this month',
+  'Open shifts trend over the last 90 days',
+  'Published rate % by task type',
+  'Top 10 organizations by scheduled hours',
+  'Compare total shifts: this month vs last month',
 ];
 
 const TIPS = [
   'Add a time range — "last 7 days", "this month".',
-  'Slice with "by unit", "by department", "by provider".',
-  'Compare with "vs" — e.g. "this month vs last month".',
+  'Slice with "by organization" or "by task type".',
+  'Compare with "vs" — "this month vs last month".',
 ];
 
 export default function Spotter() {

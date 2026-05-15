@@ -31,7 +31,7 @@ export default function Home() {
           </h1>
           <p className="home-hero-subtitle">
             Turn scheduling, credentialing, and time &amp; attendance data into action.
-            Help unit managers, scheduling admins, and physician leaders make the
+            Help scheduling admins, operations leaders, and physician leaders make the
             staffing decisions that improve patient access and reduce labor cost.
           </p>
           <button className="home-hero-cta" onClick={() => navigate('/dashboard')}>
@@ -90,7 +90,7 @@ export default function Home() {
             </div>
             <div className="home-card-content">
               <h3>Workforce Dashboard</h3>
-              <p>Track scheduling coverage, capacity, and staffing trends across providers, units, and locations.</p>
+              <p>Track scheduling coverage, open shifts, and staffing trends across organizations and task types.</p>
             </div>
           </button>
           <button className="home-card" onClick={() => navigate('/ai-analytics')}>
@@ -118,7 +118,7 @@ export default function Home() {
             </div>
             <div className="home-card-content">
               <h3>Scheduling &amp; Capacity</h3>
-              <p>Visualize shift coverage, on-call rotations, and capacity gaps so unit managers can decide who to float and where to staff up.</p>
+              <p>Track shift volume, open shifts, and published rate by organization and task type — spot coverage gaps before they hurt access to care.</p>
             </div>
           </div>
           <div className="home-card-small">
@@ -127,7 +127,7 @@ export default function Home() {
             </div>
             <div className="home-card-content">
               <h3>AI-Powered Insights</h3>
-              <p>Ask questions like "Which units are overstaffed this week?" or "Show overtime trends by department" and get instant answers.</p>
+              <p>Ask questions like "Open shifts by organization this month" or "Compare scheduled hours to last quarter" and get instant answers.</p>
             </div>
           </div>
           <div className="home-card-small">

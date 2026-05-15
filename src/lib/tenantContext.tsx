@@ -29,7 +29,7 @@ export const TENANTS: Tenant[] = [
 export const PERSONAS: Persona[] = [
   { id: 'exec',       name: 'VP, Clinical Ops',     description: 'See everything across units and locations' },
   { id: 'scheduler',  name: 'Scheduling Admin',     description: 'Focus on coverage, open shifts, and on-call' },
-  { id: 'unit',       name: 'Unit Manager',         description: 'Drill into your unit’s shifts, providers, and overtime' },
+  { id: 'ops',        name: 'Operations Lead',      description: 'Drill into shift volume, open shifts, and published rate' },
 ];
 
 interface TenantCtx {
