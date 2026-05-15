@@ -8,25 +8,29 @@ import {
   HIDE_TS_BRANDING_RULES,
   QG_CSS_VARIABLES,
 } from '../lib/thoughtspot';
+import { useTenant, buildRuntimeFilters } from '../lib/tenantContext';
 import '../lib/thoughtspot';
 
 export default function Dashboard() {
   const { liveboardId: paramId } = useParams<{ liveboardId?: string }>();
   const liveboardId = paramId || QGENDA_LIVEBOARD_ID;
   const isDefault = liveboardId === QGENDA_LIVEBOARD_ID;
+  const tenantCtx = useTenant();
 
   const embedRef = useRef<HTMLDivElement>(null);
   const embedInstanceRef = useRef<LiveboardEmbed | null>(null);
   const [mountKey, setMountKey] = useState(0);
 
-  // remount when navigating from /dashboard/:id1 to /dashboard/:id2
+  // remount when navigating or when tenant/persona changes
   useEffect(() => {
     embedInstanceRef.current = null;
     setMountKey(k => k + 1);
-  }, [liveboardId]);
+  }, [liveboardId, tenantCtx.tenant.id, tenantCtx.persona.id]);
 
   useEffect(() => {
     if (!embedRef.current || embedInstanceRef.current) return;
+
+    const runtimeFilters = buildRuntimeFilters(tenantCtx);
 
     const embed = new LiveboardEmbed(embedRef.current, {
       frameParams: { width: '100%', height: '100%' },
@@ -36,6 +40,7 @@ export default function Dashboard() {
       showLiveboardTitle: false,
       showLiveboardDescription: false,
       isLiveboardStylingAndGroupingEnabled: true,
+      runtimeFilters,
       customizations: {
         style: {
           customCSS: {
@@ -45,7 +50,6 @@ export default function Dashboard() {
             },
             rules_UNSTABLE: {
               ...HIDE_TS_BRANDING_RULES,
-              // Keep AI Highlights, hide title/description/info chips only
               ".pinboard-title-module__pinboardTitle": { display: "none !important" },
               ".pinboard-header-module__title": { display: "none !important" },
               ".pinboard-header-module__description": { display: "none !important" },
@@ -66,14 +70,6 @@ export default function Dashboard() {
                 overflow: "hidden !important",
               },
               ".react-grid-item": { border: "none !important" },
-              ".chip-base-module__chip.chip-base-module__filter:hover, [data-testid='filter-panel-chip']:hover": {
-                backgroundColor: "#1F7BB6 !important",
-                borderColor: "#1F7BB6 !important",
-                color: "#ffffff !important",
-              },
-              ".chip-base-module__chip.chip-base-module__filter:hover *, [data-testid='filter-panel-chip']:hover *": {
-                color: "#ffffff !important",
-              },
             },
           },
         },
@@ -86,13 +82,13 @@ export default function Dashboard() {
     return () => {
       embedInstanceRef.current = null;
     };
-  }, [mountKey, liveboardId, isDefault]);
+  }, [mountKey, liveboardId, isDefault, tenantCtx]);
 
   return (
     <>
       <Header
         title="Workforce Dashboard"
-        subtitle="Scheduling coverage, provider utilization, and staffing trends across units and locations"
+        subtitle={`${tenantCtx.tenant.name} · viewing as ${tenantCtx.persona.name}`}
       />
       <main className="main-content">
         <div className="page-container">

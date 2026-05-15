@@ -7,6 +7,7 @@ import {
   HIDE_TS_BRANDING_RULES,
   QG_CSS_VARIABLES,
 } from '../lib/thoughtspot';
+import { useTenant, buildRuntimeFilters } from '../lib/tenantContext';
 import '../lib/thoughtspot';
 
 const STARTER_PROMPTS = [
@@ -27,14 +28,24 @@ export default function Spotter() {
   const embedRef = useRef<HTMLDivElement>(null);
   const embedInstanceRef = useRef<SpotterEmbed | null>(null);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  const [mountKey, setMountKey] = useState(0);
+  const tenantCtx = useTenant();
+
+  useEffect(() => {
+    embedInstanceRef.current = null;
+    setMountKey(k => k + 1);
+  }, [tenantCtx.tenant.id, tenantCtx.persona.id]);
 
   useEffect(() => {
     if (!embedRef.current || embedInstanceRef.current) return;
+
+    const runtimeFilters = buildRuntimeFilters(tenantCtx);
 
     const embed = new SpotterEmbed(embedRef.current, {
       frameParams: { width: '100%', height: '100%' },
       worksheetId: QGENDA_MODEL_ID,
       updatedSpotterChatPrompt: true,
+      runtimeFilters,
       customizations: {
         style: {
           customCSS: {
@@ -51,7 +62,7 @@ export default function Spotter() {
     return () => {
       embedInstanceRef.current = null;
     };
-  }, []);
+  }, [mountKey, tenantCtx]);
 
   const handlePromptClick = (prompt: string, idx: number) => {
     navigator.clipboard?.writeText(prompt).catch(() => {});
@@ -68,7 +79,7 @@ export default function Spotter() {
       <main className="main-content">
         <div className="page-container">
           <div className="spotter-layout">
-            <div className="spotter-embed-wrap">
+            <div className="spotter-embed-wrap" key={mountKey}>
               <div className="embed-container" ref={embedRef}>
                 <div className="embed-loading">
                   <div className="embed-loading-spinner"></div>
