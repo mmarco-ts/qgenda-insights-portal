@@ -1,5 +1,6 @@
-import { Bell, HelpCircle, Settings } from 'lucide-react';
+import { Bell, Settings } from 'lucide-react';
 import TenantSwitcher from './TenantSwitcher';
+import HelpButton from './HelpButton';
 
 interface HeaderProps {
   title: string;
@@ -21,9 +22,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
       </div>
       <div className="header-right">
         <TenantSwitcher />
-        <button className="header-action" aria-label="Help">
-          <HelpCircle size={20} />
-        </button>
+        <HelpButton />
         <button className="header-action" aria-label="Notifications">
           <Bell size={20} />
         </button>

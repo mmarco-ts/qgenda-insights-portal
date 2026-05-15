@@ -270,9 +270,23 @@ body {
   padding: 0;
 }
 
+.sidebar.collapsed .sidebar-nav {
+  padding: 16px 0;
+}
+
 .sidebar.collapsed .nav-item {
   justify-content: center;
-  padding: 12px 0;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin: 4px auto;
+  border-radius: 12px;
+}
+
+.sidebar.collapsed .nav-item-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .nav-item {
@@ -628,6 +642,102 @@ body {
   background: var(--qg-gray-50);
   border-top: 1px solid var(--qg-gray-100);
   line-height: 1.4;
+}
+
+/* ============================================
+   HELP POPOVER
+   ============================================ */
+
+.help-button-wrap {
+  position: relative;
+}
+
+.help-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 280px;
+  background: var(--qg-white);
+  border: 1px solid var(--qg-gray-200);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px -10px rgba(0, 46, 97, 0.25);
+  z-index: 200;
+  padding: 14px 14px 12px;
+  animation: tenantPopIn 0.18s ease-out;
+}
+
+.help-pop-title {
+  font-family: var(--qg-font-family);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--qg-secondary);
+  margin-bottom: 6px;
+}
+
+.help-pop-body {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--qg-text);
+  margin-bottom: 12px;
+}
+
+.help-pop-mention {
+  font-weight: 600;
+  color: var(--qg-primary);
+}
+
+.help-pop-channel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--qg-gray-50);
+  border: 1px solid var(--qg-gray-200);
+  border-radius: 10px;
+  color: var(--qg-secondary);
+  font-family: var(--qg-font-family);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.help-pop-channel:hover {
+  background: var(--qg-primary-light);
+  border-color: var(--qg-primary);
+  color: var(--qg-primary);
+}
+
+.help-pop-channel-name {
+  flex: 1;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 12.5px;
+}
+
+.help-pop-copy {
+  display: inline-flex;
+  opacity: 0.6;
+}
+
+.help-pop-channel:hover .help-pop-copy {
+  opacity: 1;
+}
+
+.help-pop-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--qg-primary);
+  text-decoration: none;
+}
+
+.help-pop-link:hover {
+  text-decoration: underline;
 }
 
 /* Page Container */
