@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { SpotterEmbed } from '@thoughtspot/visual-embed-sdk';
-import { MessageSquare, Lightbulb, Copy, Check } from 'lucide-react';
+import { MessageSquare, Lightbulb, Send, Check } from 'lucide-react';
 import Header from '../components/Header';
 import {
   QGENDA_MODEL_ID,
@@ -27,14 +27,16 @@ const TIPS = [
 export default function Spotter() {
   const embedRef = useRef<HTMLDivElement>(null);
   const embedInstanceRef = useRef<SpotterEmbed | null>(null);
-  const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  const [sentIdx, setSentIdx] = useState<number | null>(null);
+  const [seedQuery, setSeedQuery] = useState<string | undefined>(undefined);
   const [mountKey, setMountKey] = useState(0);
   const tenantCtx = useTenant();
 
+  // Remount when tenant/persona/seedQuery change
   useEffect(() => {
     embedInstanceRef.current = null;
     setMountKey(k => k + 1);
-  }, [tenantCtx.tenant.id, tenantCtx.persona.id]);
+  }, [tenantCtx.tenant.id, tenantCtx.persona.id, seedQuery]);
 
   useEffect(() => {
     if (!embedRef.current || embedInstanceRef.current) return;
@@ -46,6 +48,7 @@ export default function Spotter() {
       worksheetId: QGENDA_MODEL_ID,
       updatedSpotterChatPrompt: true,
       runtimeFilters,
+      ...(seedQuery ? { searchOptions: { searchQuery: seedQuery } } : {}),
       customizations: {
         style: {
           customCSS: {
@@ -62,12 +65,12 @@ export default function Spotter() {
     return () => {
       embedInstanceRef.current = null;
     };
-  }, [mountKey, tenantCtx]);
+  }, [mountKey, tenantCtx, seedQuery]);
 
   const handlePromptClick = (prompt: string, idx: number) => {
-    navigator.clipboard?.writeText(prompt).catch(() => {});
-    setCopiedIdx(idx);
-    setTimeout(() => setCopiedIdx(null), 1600);
+    setSeedQuery(prompt);
+    setSentIdx(idx);
+    setTimeout(() => setSentIdx(null), 1600);
   };
 
   return (
@@ -100,7 +103,7 @@ export default function Spotter() {
                   Ask Insights AI
                 </div>
                 <div className="spotter-side-help">
-                  Click a question to start the conversation, or type your own below.
+                  Click a question to ask Insights AI directly, or type your own in the chat below.
                 </div>
                 <div className="spotter-prompt-list">
                   {STARTER_PROMPTS.map((p, i) => (
@@ -108,10 +111,11 @@ export default function Spotter() {
                       key={p}
                       className="spotter-prompt-card"
                       onClick={() => handlePromptClick(p, i)}
+                      title="Ask Insights AI this question"
                     >
                       <span className="spotter-prompt-text">{p}</span>
                       <span className="spotter-prompt-icon" aria-hidden="true">
-                        {copiedIdx === i ? <Check size={14} /> : <Copy size={14} />}
+                        {sentIdx === i ? <Check size={14} /> : <Send size={13} />}
                       </span>
                     </button>
                   ))}
