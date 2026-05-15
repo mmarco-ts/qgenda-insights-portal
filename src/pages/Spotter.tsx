@@ -10,12 +10,12 @@ import {
 import '../lib/thoughtspot';
 
 const STARTER_PROMPTS = [
-  'Which units have the most open shifts this week?',
-  'Show overtime hours by department over the last 90 days',
-  'Top 10 providers by hours scheduled this month',
-  'Compare staffing levels for nights vs days',
-  'Which credentials are expiring in the next 60 days?',
-  'Show schedule coverage trends across locations',
+  'Units with the most open shifts this week',
+  'Overtime hours by department, last 90 days',
+  'Top 10 providers by hours scheduled',
+  'Staffing levels: nights vs days',
+  'Credentials expiring in the next 60 days',
+  'Schedule coverage trends by location',
 ];
 
 const TIPS = [
