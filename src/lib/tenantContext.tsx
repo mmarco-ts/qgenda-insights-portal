@@ -17,6 +17,8 @@ export interface Persona {
   description: string;
   /** Optional Task Type filter to scope the data to what this persona cares about. */
   taskTypeValues?: string[];
+  /** Starter questions tuned to this persona — rendered in the Spotter side panel. */
+  prompts: string[];
 }
 
 export const TENANTS: Tenant[] = [
@@ -27,9 +29,42 @@ export const TENANTS: Tenant[] = [
 ];
 
 export const PERSONAS: Persona[] = [
-  { id: 'exec',       name: 'VP, Clinical Ops',     description: 'See everything across units and locations' },
-  { id: 'scheduler',  name: 'Scheduling Admin',     description: 'Focus on coverage, open shifts, and on-call' },
-  { id: 'ops',        name: 'Operations Lead',      description: 'Drill into shift volume, open shifts, and published rate' },
+  {
+    id: 'exec',
+    name: 'VP, Clinical Ops',
+    description: 'Cross-organization, strategic view',
+    prompts: [
+      'Total shifts by organization year over year',
+      'Top 10 organizations by scheduled hours',
+      'Published rate % trend across all organizations',
+      'Compare total shifts: this quarter vs last quarter',
+      'Which organizations have the lowest published rate?',
+    ],
+  },
+  {
+    id: 'scheduler',
+    name: 'Scheduling Admin',
+    description: 'Coverage, open shifts, and fill operations',
+    prompts: [
+      'Open shifts trend over the last 90 days',
+      'Published rate % by task type this month',
+      'Total shifts vs open shifts by week',
+      'Which task types have the most open shifts?',
+      'Open shifts by organization in the last 30 days',
+    ],
+  },
+  {
+    id: 'ops',
+    name: 'Operations Lead',
+    description: 'Task-level execution and throughput',
+    prompts: [
+      'Scheduled hours by task type this month',
+      'Compare task type volume: this month vs last month',
+      'Daily shift volume over the last 30 days',
+      'Top task types by total shifts',
+      'Published rate by task type and organization',
+    ],
+  },
 ];
 
 interface TenantCtx {

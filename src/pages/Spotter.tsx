@@ -10,14 +10,6 @@ import {
 import { useTenant, buildRuntimeFilters } from '../lib/tenantContext';
 import '../lib/thoughtspot';
 
-const STARTER_PROMPTS = [
-  'Total shifts by organization this month',
-  'Open shifts trend over the last 90 days',
-  'Published rate % by task type',
-  'Top 10 organizations by scheduled hours',
-  'Compare total shifts: this month vs last month',
-];
-
 const TIPS = [
   'Add a time range — "last 7 days", "this month".',
   'Slice with "by organization" or "by task type".',
@@ -32,6 +24,7 @@ export default function Spotter() {
   const [sentIdx, setSentIdx] = useState<number | null>(null);
   const [mountKey, setMountKey] = useState(0);
   const tenantCtx = useTenant();
+  const starterPrompts = tenantCtx.persona.prompts;
 
   // Only remount on tenant/persona changes — never on prompt click.
   useEffect(() => {
@@ -123,13 +116,13 @@ export default function Spotter() {
               <div className="spotter-side-section">
                 <div className="spotter-side-eyebrow">
                   <MessageSquare size={13} />
-                  Ask Insights AI
+                  For {tenantCtx.persona.name}
                 </div>
                 <div className="spotter-side-help">
-                  Click a question to ask Insights AI directly, or type your own in the chat below.
+                  Questions tuned for your view. Click one to ask Insights AI, or type your own.
                 </div>
                 <div className="spotter-prompt-list">
-                  {STARTER_PROMPTS.map((p, i) => (
+                  {starterPrompts.map((p, i) => (
                     <button
                       key={p}
                       className="spotter-prompt-card"

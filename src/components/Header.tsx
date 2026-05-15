@@ -39,12 +39,13 @@ export default function Header({ title, subtitle }: HeaderProps) {
 }
 
 function TSLogo() {
-  // Simplified ThoughtSpot brand mark (stacked bars).
+  // ThoughtSpot mark — a stylized "T" with a teal cross-bar accent.
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="3"  y="13" width="4" height="8" rx="1" fill="#1F2A44" />
-      <rect x="10" y="9"  width="4" height="12" rx="1" fill="#1F2A44" />
-      <rect x="17" y="4"  width="4" height="17" rx="1" fill="#2DD3A9" />
+    <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="1" width="30" height="30" rx="7" fill="#1B1F2C" />
+      <rect x="6" y="9.5" width="20" height="3.5" rx="0.5" fill="#FFFFFF" />
+      <rect x="14.25" y="9.5" width="3.5" height="14" rx="0.5" fill="#FFFFFF" />
+      <rect x="6" y="9.5" width="6" height="3.5" rx="0.5" fill="#22D3A6" />
     </svg>
   );
 }
