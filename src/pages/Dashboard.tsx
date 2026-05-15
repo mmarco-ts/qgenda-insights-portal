@@ -88,7 +88,7 @@ export default function Dashboard() {
     <>
       <Header
         title="Workforce Dashboard"
-        subtitle={`${tenantCtx.tenant.name} · viewing as ${tenantCtx.persona.name}`}
+        subtitle={`${tenantCtx.tenant.name} · ${tenantCtx.persona.name}${tenantCtx.persona.dateRangeLabel ? ` · ${tenantCtx.persona.dateRangeLabel}` : ''}`}
       />
       <main className="main-content">
         <div className="page-container">

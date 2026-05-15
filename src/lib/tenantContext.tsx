@@ -17,6 +17,10 @@ export interface Persona {
   description: string;
   /** Optional Task Type filter to scope the data to what this persona cares about. */
   taskTypeValues?: string[];
+  /** Lookback window in days applied to Shift Date (e.g. 7 = "last 7 days"). */
+  dateRangeDays?: number;
+  /** Human-friendly label for the date scope, shown in the UI. */
+  dateRangeLabel?: string;
   /** Starter questions tuned to this persona — rendered in the Spotter side panel. */
   prompts: string[];
 }
@@ -32,7 +36,9 @@ export const PERSONAS: Persona[] = [
   {
     id: 'exec',
     name: 'VP, Clinical Ops',
-    description: 'Cross-organization, strategic view',
+    description: 'Year-to-date strategic view',
+    dateRangeDays: 365,
+    dateRangeLabel: 'Last 365 days',
     prompts: [
       'Total shifts by organization year over year',
       'Top 10 organizations by scheduled hours',
@@ -44,25 +50,29 @@ export const PERSONAS: Persona[] = [
   {
     id: 'scheduler',
     name: 'Scheduling Admin',
-    description: 'Coverage, open shifts, and fill operations',
+    description: 'This week — coverage and fill ops',
+    dateRangeDays: 7,
+    dateRangeLabel: 'Last 7 days',
     prompts: [
-      'Open shifts trend over the last 90 days',
-      'Published rate % by task type this month',
-      'Total shifts vs open shifts by week',
-      'Which task types have the most open shifts?',
-      'Open shifts by organization in the last 30 days',
+      'Open shifts trend over the last 7 days',
+      'Published rate % by task type this week',
+      'Total shifts vs open shifts by day this week',
+      'Which task types have the most open shifts this week?',
+      'Open shifts by organization in the last 7 days',
     ],
   },
   {
     id: 'ops',
     name: 'Operations Lead',
-    description: 'Task-level execution and throughput',
+    description: 'Today — task-level execution',
+    dateRangeDays: 1,
+    dateRangeLabel: 'Last 24 hours',
     prompts: [
-      'Scheduled hours by task type this month',
-      'Compare task type volume: this month vs last month',
-      'Daily shift volume over the last 30 days',
-      'Top task types by total shifts',
-      'Published rate by task type and organization',
+      'Scheduled hours by task type today',
+      'Compare task type volume: today vs yesterday',
+      'Hourly shift volume in the last 24 hours',
+      'Top task types by total shifts today',
+      'Open shifts right now by organization',
     ],
   },
 ];
@@ -76,6 +86,8 @@ interface TenantCtx {
   orgField: string;
   /** Field name on the workforce model used to filter by persona task type. */
   taskTypeField: string;
+  /** Field name on the workforce model used for date filtering. */
+  dateField: string;
 }
 
 const TenantContext = createContext<TenantCtx | null>(null);
@@ -102,6 +114,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
         setPersonaId: setPersonaIdState,
         orgField: 'Organization',
         taskTypeField: 'Task Type',
+        dateField: 'Shift Date',
       }}
     >
       {children}
@@ -121,6 +134,7 @@ export function useTenant() {
  */
 export function buildRuntimeFilters(ctx: TenantCtx) {
   const filters: Array<{ columnName: string; operator: RuntimeFilterOp; values: (string | number)[] }> = [];
+
   if (ctx.tenant.orgValues.length > 0) {
     filters.push({
       columnName: ctx.orgField,
@@ -128,6 +142,7 @@ export function buildRuntimeFilters(ctx: TenantCtx) {
       values: ctx.tenant.orgValues,
     });
   }
+
   if (ctx.persona.taskTypeValues && ctx.persona.taskTypeValues.length > 0) {
     filters.push({
       columnName: ctx.taskTypeField,
@@ -135,5 +150,17 @@ export function buildRuntimeFilters(ctx: TenantCtx) {
       values: ctx.persona.taskTypeValues,
     });
   }
+
+  // Date range filter — applied as Shift Date >= today minus N days.
+  // TS runtime filters expect epoch seconds for date columns.
+  if (ctx.persona.dateRangeDays && ctx.persona.dateRangeDays > 0) {
+    const startSec = Math.floor(Date.now() / 1000) - ctx.persona.dateRangeDays * 86400;
+    filters.push({
+      columnName: ctx.dateField,
+      operator: RuntimeFilterOp.GE,
+      values: [startSec],
+    });
+  }
+
   return filters;
 }
