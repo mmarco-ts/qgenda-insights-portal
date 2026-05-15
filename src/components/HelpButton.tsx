@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { HelpCircle, Hash, Copy, Check, ExternalLink } from 'lucide-react';
+import { HelpCircle, Hash, Copy, Check } from 'lucide-react';
 
 const SLACK_CHANNEL = 'ext-qgenda-thoughtspot';
 const TEAM = ['Manuel', 'Jack Mulcahy'];
-const SLACK_DEEP_LINK = `slack://channel?team=&id=${SLACK_CHANNEL}`;
+// Web fallback URL — works even if the desktop app isn't installed.
+const SLACK_WEB_URL = `https://slack.com/app_redirect?channel=${SLACK_CHANNEL}`;
 
 export default function HelpButton() {
   const [open, setOpen] = useState(false);
@@ -48,26 +49,40 @@ export default function HelpButton() {
                 {i === TEAM.length - 2 && ' and '}
               </span>
             ))}{' '}
-            in the Slack channel below.
+            in Slack.
           </div>
 
+          <a
+            className="help-pop-slack-btn"
+            href={SLACK_WEB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+          >
+            <SlackIcon />
+            <span>Open #{SLACK_CHANNEL} in Slack</span>
+          </a>
+
           <button className="help-pop-channel" onClick={handleCopy}>
-            <Hash size={14} />
+            <Hash size={13} />
             <span className="help-pop-channel-name">{SLACK_CHANNEL}</span>
             <span className="help-pop-copy" aria-label="Copy channel name">
               {copied ? <Check size={14} /> : <Copy size={13} />}
             </span>
           </button>
-
-          <a
-            className="help-pop-link"
-            href={SLACK_DEEP_LINK}
-            onClick={() => setOpen(false)}
-          >
-            Open in Slack <ExternalLink size={12} />
-          </a>
         </div>
       )}
     </div>
+  );
+}
+
+function SlackIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="#E01E5A" d="M5 15a2 2 0 1 1 0-4h2v4H5Zm1-6a2 2 0 1 1 4 0v6a2 2 0 1 1-4 0V9Z" />
+      <path fill="#36C5F0" d="M9 5a2 2 0 1 1 4 0v2H9V5Zm6 1a2 2 0 1 1 0 4H9a2 2 0 1 1 0-4h6Z" />
+      <path fill="#2EB67D" d="M19 9a2 2 0 1 1 0 4h-2V9h2Zm-1 6a2 2 0 1 1-4 0V9a2 2 0 1 1 4 0v6Z" />
+      <path fill="#ECB22E" d="M15 19a2 2 0 1 1-4 0v-2h4v2Zm-6-1a2 2 0 1 1 0-4h6a2 2 0 1 1 0 4H9Z" />
+    </svg>
   );
 }
