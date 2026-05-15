@@ -26,8 +26,6 @@ const TIPS = [
 export default function Spotter() {
   const embedRef = useRef<HTMLDivElement>(null);
   const embedInstanceRef = useRef<SpotterEmbed | null>(null);
-  const [seedQuery, setSeedQuery] = useState<string | null>(null);
-  const [mountKey, setMountKey] = useState(0);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
 
   useEffect(() => {
@@ -37,7 +35,6 @@ export default function Spotter() {
       frameParams: { width: '100%', height: '100%' },
       worksheetId: QGENDA_MODEL_ID,
       updatedSpotterChatPrompt: true,
-      ...(seedQuery ? { searchOptions: { searchTokenString: seedQuery, executeSearch: true } } : {}),
       customizations: {
         style: {
           customCSS: {
@@ -54,12 +51,9 @@ export default function Spotter() {
     return () => {
       embedInstanceRef.current = null;
     };
-  }, [mountKey, seedQuery]);
+  }, []);
 
   const handlePromptClick = (prompt: string, idx: number) => {
-    setSeedQuery(prompt);
-    embedInstanceRef.current = null;
-    setMountKey(k => k + 1);
     navigator.clipboard?.writeText(prompt).catch(() => {});
     setCopiedIdx(idx);
     setTimeout(() => setCopiedIdx(null), 1600);
@@ -74,7 +68,7 @@ export default function Spotter() {
       <main className="main-content">
         <div className="page-container">
           <div className="spotter-layout">
-            <div className="spotter-embed-wrap" key={mountKey}>
+            <div className="spotter-embed-wrap">
               <div className="embed-container" ref={embedRef}>
                 <div className="embed-loading">
                   <div className="embed-loading-spinner"></div>
