@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { SpotterEmbed } from '@thoughtspot/visual-embed-sdk';
+import { SpotterEmbed, HostEvent, EmbedEvent } from '@thoughtspot/visual-embed-sdk';
 import { MessageSquare, Lightbulb, Send, Check } from 'lucide-react';
 import Header from '../components/Header';
 import {
@@ -27,16 +27,18 @@ const TIPS = [
 export default function Spotter() {
   const embedRef = useRef<HTMLDivElement>(null);
   const embedInstanceRef = useRef<SpotterEmbed | null>(null);
+  const embedReadyRef = useRef(false);
+  const pendingQueryRef = useRef<string | null>(null);
   const [sentIdx, setSentIdx] = useState<number | null>(null);
-  const [seedQuery, setSeedQuery] = useState<string | undefined>(undefined);
   const [mountKey, setMountKey] = useState(0);
   const tenantCtx = useTenant();
 
-  // Remount when tenant/persona/seedQuery change
+  // Only remount on tenant/persona changes — never on prompt click.
   useEffect(() => {
     embedInstanceRef.current = null;
+    embedReadyRef.current = false;
     setMountKey(k => k + 1);
-  }, [tenantCtx.tenant.id, tenantCtx.persona.id, seedQuery]);
+  }, [tenantCtx.tenant.id, tenantCtx.persona.id]);
 
   useEffect(() => {
     if (!embedRef.current || embedInstanceRef.current) return;
@@ -48,7 +50,6 @@ export default function Spotter() {
       worksheetId: QGENDA_MODEL_ID,
       updatedSpotterChatPrompt: true,
       runtimeFilters,
-      ...(seedQuery ? { searchOptions: { searchQuery: seedQuery } } : {}),
       customizations: {
         style: {
           customCSS: {
@@ -59,18 +60,40 @@ export default function Spotter() {
       },
     });
 
+    // Mark ready and flush any pending query that was clicked before load finished.
+    const markReady = () => {
+      embedReadyRef.current = true;
+      const pending = pendingQueryRef.current;
+      if (pending) {
+        pendingQueryRef.current = null;
+        embed.trigger(HostEvent.SpotterSearch, { query: pending, executeSearch: true });
+      }
+    };
+    embed.on(EmbedEvent.SpotterLoadComplete, markReady);
+    embed.on(EmbedEvent.APP_INIT, markReady);
+
     embedInstanceRef.current = embed;
     embed.render();
 
     return () => {
       embedInstanceRef.current = null;
+      embedReadyRef.current = false;
     };
-  }, [mountKey, tenantCtx, seedQuery]);
+  }, [mountKey, tenantCtx]);
 
   const handlePromptClick = (prompt: string, idx: number) => {
-    setSeedQuery(prompt);
     setSentIdx(idx);
     setTimeout(() => setSentIdx(null), 1600);
+
+    if (embedInstanceRef.current && embedReadyRef.current) {
+      embedInstanceRef.current.trigger(HostEvent.SpotterSearch, {
+        query: prompt,
+        executeSearch: true,
+      });
+    } else {
+      // queue until SpotterLoadComplete fires
+      pendingQueryRef.current = prompt;
+    }
   };
 
   return (
