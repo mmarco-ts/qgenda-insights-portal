@@ -1,15 +1,20 @@
 import { NavLink } from 'react-router-dom';
-import { Home, LayoutDashboard, Sparkles, FolderOpen } from 'lucide-react';
+import { Home, LayoutDashboard, Sparkles, FolderOpen, ChevronLeft } from 'lucide-react';
 import { useCurrentUser } from '../lib/useCurrentUser';
 
-export default function Sidebar() {
+interface SidebarProps {
+  collapsed: boolean;
+  onToggle: () => void;
+}
+
+export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const { user, loading } = useCurrentUser();
   const displayName = user?.displayName || (loading ? 'Loading…' : 'Guest');
   const userRole = user?.userName ? `@${user.userName}` : 'Sign in to QGenda Insights';
   const initials = user?.initials || (loading ? '…' : 'G');
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
         <div className="sidebar-logo">
           <div className="sidebar-logo-mark">Q</div>
@@ -20,55 +25,42 @@ export default function Sidebar() {
         </div>
       </div>
 
+      <button
+        className="sidebar-toggle-edge"
+        onClick={onToggle}
+        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        <ChevronLeft size={14} />
+      </button>
+
       <nav className="sidebar-nav">
         <div className="nav-section">
           <div className="nav-section-title">Navigation</div>
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-          >
-            <span className="nav-item-icon">
-              <Home size={20} />
-            </span>
+          <NavLink to="/" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-item-icon"><Home size={20} /></span>
             <span className="nav-item-text">Home</span>
           </NavLink>
         </div>
 
         <div className="nav-section">
           <div className="nav-section-title">Workforce Analytics</div>
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-          >
-            <span className="nav-item-icon">
-              <LayoutDashboard size={20} />
-            </span>
+          <NavLink to="/dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-item-icon"><LayoutDashboard size={20} /></span>
             <span className="nav-item-text">Workforce Dashboard</span>
           </NavLink>
-          <NavLink
-            to="/ai-analytics"
-            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-          >
-            <span className="nav-item-icon">
-              <Sparkles size={20} />
-            </span>
+          <NavLink to="/ai-analytics" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-item-icon"><Sparkles size={20} /></span>
             <span className="nav-item-text">Insights AI</span>
           </NavLink>
-          <NavLink
-            to="/my-reports"
-            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-          >
-            <span className="nav-item-icon">
-              <FolderOpen size={20} />
-            </span>
+          <NavLink to="/my-reports" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-item-icon"><FolderOpen size={20} /></span>
             <span className="nav-item-text">My Reports</span>
           </NavLink>
         </div>
       </nav>
 
       <div className="sidebar-footer">
-        <div className="sidebar-user">
+        <div className="sidebar-user" title={`${displayName} ${userRole}`}>
           <div className="sidebar-user-avatar">{initials}</div>
           <div className="sidebar-user-info">
             <div className="sidebar-user-name">{displayName}</div>
