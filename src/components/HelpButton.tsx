@@ -30,11 +30,13 @@ export default function HelpButton() {
   return (
     <div className="help-button-wrap" ref={wrapRef}>
       <button
-        className="header-action"
-        aria-label="Help"
+        className={`help-trigger ${open ? 'open' : ''}`}
+        aria-label="Need help?"
         onClick={() => setOpen(o => !o)}
       >
-        <HelpCircle size={20} />
+        <HelpCircle size={16} />
+        <span className="help-trigger-label">Need help?</span>
+        <span className="help-trigger-dot" aria-hidden="true" />
       </button>
 
       {open && (
