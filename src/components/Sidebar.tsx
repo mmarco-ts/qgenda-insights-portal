@@ -1,19 +1,15 @@
 import { NavLink } from 'react-router-dom';
-import { Home, LayoutDashboard, Sparkles, ChevronLeft, FolderOpen } from 'lucide-react';
+import { Home, LayoutDashboard, Sparkles, FolderOpen } from 'lucide-react';
 import { useCurrentUser } from '../lib/useCurrentUser';
 
-interface SidebarProps {
-  collapsed: boolean;
-  onToggle: () => void;
-}
-
-export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
+export default function Sidebar() {
   const { user, loading } = useCurrentUser();
   const displayName = user?.displayName || (loading ? 'Loading…' : 'Guest');
   const userRole = user?.userName ? `@${user.userName}` : 'Sign in to QGenda Insights';
   const initials = user?.initials || (loading ? '…' : 'G');
+
   return (
-    <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+    <aside className="sidebar">
       <div className="sidebar-header">
         <div className="sidebar-logo">
           <div className="sidebar-logo-mark">Q</div>
@@ -22,9 +18,6 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <span className="sidebar-logo-subtitle">Insights</span>
           </div>
         </div>
-        <button className="sidebar-toggle" onClick={onToggle} aria-label="Toggle sidebar">
-          <ChevronLeft size={18} />
-        </button>
       </div>
 
       <nav className="sidebar-nav">

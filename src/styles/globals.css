@@ -125,14 +125,9 @@ body {
   box-shadow: 4px 0 24px rgba(0, 46, 97, 0.15);
 }
 
-.sidebar.collapsed {
-  width: var(--sidebar-collapsed-width);
-}
-
 .sidebar-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 20px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   min-height: var(--header-height);
@@ -180,11 +175,6 @@ body {
   transition: opacity var(--transition-fast);
 }
 
-.sidebar.collapsed .sidebar-logo-text {
-  opacity: 0;
-  width: 0;
-}
-
 .sidebar-logo-title {
   font-size: var(--qg-heading-5-size);
   font-weight: 800;
@@ -197,29 +187,6 @@ body {
   color: var(--qg-cta);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-}
-
-.sidebar-toggle {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: var(--qg-white);
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-  flex-shrink: 0;
-}
-
-.sidebar-toggle:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.sidebar.collapsed .sidebar-toggle {
-  transform: rotate(180deg);
 }
 
 .sidebar-nav {
@@ -244,10 +211,6 @@ body {
   overflow: hidden;
   opacity: 1;
   transition: opacity var(--transition-fast);
-}
-
-.sidebar.collapsed .nav-section-title {
-  opacity: 0;
 }
 
 .nav-item {
@@ -291,10 +254,6 @@ body {
   transition: opacity var(--transition-fast);
 }
 
-.sidebar.collapsed .nav-item-text {
-  opacity: 0;
-}
-
 .sidebar-footer {
   padding: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -328,10 +287,6 @@ body {
   white-space: nowrap;
   opacity: 1;
   transition: opacity var(--transition-fast);
-}
-
-.sidebar.collapsed .sidebar-user-info {
-  opacity: 0;
 }
 
 .sidebar-user-name {
@@ -1278,9 +1233,7 @@ body {
   position: sticky;
   top: 0;
   align-self: start;
-  max-height: calc(100vh - 200px);
-  overflow-y: auto;
-  padding-right: 2px;
+  overflow: visible;
 }
 
 .spotter-side-status {

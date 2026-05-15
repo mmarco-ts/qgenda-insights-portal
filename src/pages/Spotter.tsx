@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { SpotterEmbed } from '@thoughtspot/visual-embed-sdk';
-import { Sparkles, MessageSquare, Lightbulb, Copy, Check } from 'lucide-react';
+import { MessageSquare, Lightbulb, Copy, Check } from 'lucide-react';
 import Header from '../components/Header';
 import {
   QGENDA_MODEL_ID,
@@ -15,14 +15,12 @@ const STARTER_PROMPTS = [
   'Top 10 providers by hours scheduled',
   'Staffing levels: nights vs days',
   'Credentials expiring in the next 60 days',
-  'Schedule coverage trends by location',
 ];
 
 const TIPS = [
-  { title: 'Be specific about time', body: 'Add "last 7 days", "this month", or a date range to narrow the answer.' },
-  { title: 'Slice by what matters', body: 'Try "by unit", "by department", or "by provider" to break down the metric.' },
-  { title: 'Compare two things', body: 'Use "vs" or "compared to" — e.g. "overtime this month vs last month".' },
-  { title: 'Drill into outliers', body: 'Click any data point in a chart to filter the next question to that segment.' },
+  'Add a time range — "last 7 days", "this month".',
+  'Slice with "by unit", "by department", "by provider".',
+  'Compare with "vs" — e.g. "this month vs last month".',
 ];
 
 export default function Spotter() {
@@ -117,27 +115,14 @@ export default function Spotter() {
 
               <div className="spotter-side-section">
                 <div className="spotter-side-eyebrow">
-                  <Lightbulb size={13} />
-                  Tips for better answers
+                  <Lightbulb size={12} />
+                  Tips
                 </div>
                 <ul className="spotter-tips">
                   {TIPS.map(t => (
-                    <li key={t.title}>
-                      <strong>{t.title}.</strong> {t.body}
-                    </li>
+                    <li key={t}>{t}</li>
                   ))}
                 </ul>
-              </div>
-
-              <div className="spotter-side-section spotter-side-context">
-                <div className="spotter-side-eyebrow">
-                  <Sparkles size={13} />
-                  Data context
-                </div>
-                <p>
-                  Insights AI is connected to your workforce model — schedules, shifts, providers,
-                  credentialing, and time &amp; attendance. Ask anything across those entities in plain English.
-                </p>
               </div>
             </aside>
           </div>
